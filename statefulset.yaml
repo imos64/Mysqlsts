@@ -13,7 +13,7 @@ data:
   replica.cnf: |
     # Apply this config only on replicas.
     [mysqld]
-    super-read-write
+    super-read-only
     
 ---
 # Headless service for stable DNS entries of StatefulSet members.
@@ -41,6 +41,7 @@ metadata:
   labels:
     app: mysql
     app.kubernetes.io/name: mysql
+    readonly: "true"
 spec:
   ports:
   - name: mysql
@@ -52,7 +53,7 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mysql
+  name: mysql-db
 spec:
   selector:
     matchLabels:
@@ -216,4 +217,4 @@ spec:
       accessModes: ["ReadWriteOnce"]
       resources:
         requests:
-          storage: 10Gi
+          storage: 6Gi
